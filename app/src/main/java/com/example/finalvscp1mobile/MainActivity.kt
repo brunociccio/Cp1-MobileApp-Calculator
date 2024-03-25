@@ -4,35 +4,36 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
+import com.example.finalvscp1mobile.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
 
-    private lateinit var displayTextView: TextView
+class MainActivity : ComponentActivity() {
+
+    private lateinit var binding: ActivityMainBinding
     private var currentInput: StringBuilder = StringBuilder()
     private var currentOperator: String = ""
     private var operand1: Double = 0.0
     private var operand2: Double = 0.0
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        displayTextView = findViewById(R.id.textViewDisplay)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         setupNumberButtons()
         setupOperationButtons()
     }
 
     private fun setupNumberButtons() {
-        val numberButtonClickListener = View.OnClickListener { v ->
-            val number = (v as Button).text.toString()
+        var numberButtonClickListener = View.OnClickListener { v ->
+            var number = (v as Button).text.toString()
             currentInput.append(number)
             updateDisplay()
         }
 
-        val numberButtonIds = listOf(
+        var numberButtonIds = listOf(
             R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4,
             R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9
         )
@@ -43,8 +44,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupOperationButtons() {
-        val operationButtonClickListener = View.OnClickListener { v ->
-            val operator = (v as Button).text.toString()
+        var operationButtonClickListener = View.OnClickListener { v ->
+            var operator = (v as Button).text.toString()
 
             if (currentInput.isNotEmpty()) {
                 if (operand1 == 0.0) {
@@ -58,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val operationButtonIds = listOf(
+        var operationButtonIds = listOf(
             R.id.buttonAdd, R.id.buttonSubtract,
             R.id.buttonMultiply, R.id.buttonDivide
         )
@@ -84,13 +85,9 @@ class MainActivity : AppCompatActivity() {
             currentOperator = ""
             updateDisplay()
         }
-
-        // Configurar botão de inverter sinal
-        findViewById<Button>(R.id.buttonInvert).setOnClickListener {
-            invertSignal()
-        }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun performOperation() {
         when (currentOperator) {
             "+" -> {
@@ -110,32 +107,19 @@ class MainActivity : AppCompatActivity() {
                     val result = operand1 / operand2
                     displayResult(result)
                 } else {
-                    displayTextView.text = "Error"
+                    binding.textViewDisplay.text = "Error"
                 }
             }
         }
     }
 
     private fun displayResult(result: Double) {
-        displayTextView.text = result.toString()
+        binding.textViewDisplay.text = result.toString()
         currentInput.clear()
         operand1 = result
     }
 
     private fun updateDisplay() {
-        displayTextView.text = currentInput.toString()
-    }
-
-    private fun invertSignal() {
-        if (currentInput.isNotEmpty()) {
-            val currentValue = currentInput.toString().toDouble()
-            val invertedValue = -currentValue
-            currentInput.clear()
-            currentInput.append(invertedValue)
-            updateDisplay()
-        } else if (operand1 != 0.0) {
-            operand1 = -operand1
-            updateDisplay()
-        }
+        binding.textViewDisplay.text = currentInput.toString()
     }
 }
