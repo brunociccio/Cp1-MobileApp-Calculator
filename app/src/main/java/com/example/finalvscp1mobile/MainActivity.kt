@@ -84,9 +84,13 @@ class MainActivity : AppCompatActivity() {
             currentOperator = ""
             updateDisplay()
         }
+
+        // Configurar botão de inverter sinal
+        findViewById<Button>(R.id.buttonInvert).setOnClickListener {
+            invertSignal()
+        }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun performOperation() {
         when (currentOperator) {
             "+" -> {
@@ -121,5 +125,17 @@ class MainActivity : AppCompatActivity() {
     private fun updateDisplay() {
         displayTextView.text = currentInput.toString()
     }
-}
 
+    private fun invertSignal() {
+        if (currentInput.isNotEmpty()) {
+            val currentValue = currentInput.toString().toDouble()
+            val invertedValue = -currentValue
+            currentInput.clear()
+            currentInput.append(invertedValue)
+            updateDisplay()
+        } else if (operand1 != 0.0) {
+            operand1 = -operand1
+            updateDisplay()
+        }
+    }
+}
