@@ -7,6 +7,13 @@ import android.widget.Button
 import androidx.activity.ComponentActivity
 import com.example.finalvscp1mobile.databinding.ActivityMainBinding
 
+// Integrantes:
+// rm99097- Bruno Ciccio (representante)
+// rm97751 - Isa Corsi
+// rm99488 - José Duarte
+// rm99292 - Thalita Alencar
+// rm551569 - Mari Cucco
+
 class MainActivity : ComponentActivity() {
 
     private lateinit var binding: ActivityMainBinding
