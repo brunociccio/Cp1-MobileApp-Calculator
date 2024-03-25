@@ -7,7 +7,6 @@ import android.widget.Button
 import androidx.activity.ComponentActivity
 import com.example.finalvscp1mobile.databinding.ActivityMainBinding
 
-
 class MainActivity : ComponentActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -24,16 +23,17 @@ class MainActivity : ComponentActivity() {
 
         setupNumberButtons()
         setupOperationButtons()
+        setupInvertButton()
     }
 
     private fun setupNumberButtons() {
-        var numberButtonClickListener = View.OnClickListener { v ->
-            var number = (v as Button).text.toString()
+        val numberButtonClickListener = View.OnClickListener { v ->
+            val number = (v as Button).text.toString()
             currentInput.append(number)
             updateDisplay()
         }
 
-        var numberButtonIds = listOf(
+        val numberButtonIds = listOf(
             R.id.button0, R.id.button1, R.id.button2, R.id.button3, R.id.button4,
             R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9
         )
@@ -44,8 +44,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun setupOperationButtons() {
-        var operationButtonClickListener = View.OnClickListener { v ->
-            var operator = (v as Button).text.toString()
+        val operationButtonClickListener = View.OnClickListener { v ->
+            val operator = (v as Button).text.toString()
 
             if (currentInput.isNotEmpty()) {
                 if (operand1 == 0.0) {
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        var operationButtonIds = listOf(
+        val operationButtonIds = listOf(
             R.id.buttonAdd, R.id.buttonSubtract,
             R.id.buttonMultiply, R.id.buttonDivide
         )
@@ -83,6 +83,28 @@ class MainActivity : ComponentActivity() {
             operand1 = 0.0
             operand2 = 0.0
             currentOperator = ""
+            updateDisplay()
+        }
+    }
+
+    private fun setupInvertButton() {
+        findViewById<Button>(R.id.buttonInvert).setOnClickListener {
+            invertSign()
+        }
+    }
+
+    private fun invertSign() {
+        if (currentInput.isNotEmpty()) {
+            val inputNumber = currentInput.toString().toDouble()
+            val invertedNumber = -inputNumber
+            currentInput.clear()
+            currentInput.append(invertedNumber)
+            updateDisplay()
+        } else if (operand2 != 0.0) {
+            operand2 = -operand2
+            updateDisplay()
+        } else if (operand1 != 0.0) {
+            operand1 = -operand1
             updateDisplay()
         }
     }
@@ -123,3 +145,4 @@ class MainActivity : ComponentActivity() {
         binding.textViewDisplay.text = currentInput.toString()
     }
 }
+
